@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Nancy.Hosting.Self;
 
 namespace MagicPlaylist.Web
 {
@@ -10,7 +11,12 @@ namespace MagicPlaylist.Web
     {
         static void Main(string[] args)
         {
-            
+            var url = new Uri("http://127.0.0.1:3000");
+            using (var nh = new NancyHost(url))
+            {
+                nh.Start();
+                Console.ReadLine();
+            }
         }
     }
 }
