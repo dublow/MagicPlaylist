@@ -11,7 +11,7 @@ namespace MagicPlaylist.Web
     {
         static void Main(string[] args)
         {
-            var url = new Uri("http://127.0.0.1:3000");
+            var url = new Uri("http://localhost:3000");
             using (var nh = new NancyHost(url))
             {
                 nh.Start();

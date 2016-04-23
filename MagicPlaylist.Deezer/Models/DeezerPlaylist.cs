@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MagicPlaylist.Gateway
+namespace MagicPlaylist.Deezer.Models
 {
-    public class Class1
+    public class DeezerPlaylist
     {
+        public string Id { get; set; }
     }
 }

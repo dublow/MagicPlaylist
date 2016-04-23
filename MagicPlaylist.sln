@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPlaylist.Web", "MagicPlaylist.Web\MagicPlaylist.Web.csproj", "{BD57E184-0D06-4793-8DD9-8F5B1AF3DC1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPlaylist.Gateway", "MagicPlaylist.Gateway\MagicPlaylist.Gateway.csproj", "{EF495240-5530-4878-9927-7318AE70D18D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPlaylist.Deezer", "MagicPlaylist.Deezer\MagicPlaylist.Deezer.csproj", "{92E1031B-8D41-4A76-B621-64EC6FA4FB99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPlaylist.Test", "MagicPlaylist.Test\MagicPlaylist.Test.csproj", "{75AB938A-3C54-45D3-A34A-B91BDE424DDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPlaylist.Gateway", "MagicPlaylist.Gateway\MagicPlaylist.Gateway.csproj", "{9D90929B-54A5-4B53-AEB4-7E9DCF40430B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{BD57E184-0D06-4793-8DD9-8F5B1AF3DC1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD57E184-0D06-4793-8DD9-8F5B1AF3DC1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD57E184-0D06-4793-8DD9-8F5B1AF3DC1C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF495240-5530-4878-9927-7318AE70D18D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF495240-5530-4878-9927-7318AE70D18D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF495240-5530-4878-9927-7318AE70D18D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF495240-5530-4878-9927-7318AE70D18D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75AB938A-3C54-45D3-A34A-B91BDE424DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75AB938A-3C54-45D3-A34A-B91BDE424DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75AB938A-3C54-45D3-A34A-B91BDE424DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75AB938A-3C54-45D3-A34A-B91BDE424DDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92E1031B-8D41-4A76-B621-64EC6FA4FB99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92E1031B-8D41-4A76-B621-64EC6FA4FB99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92E1031B-8D41-4A76-B621-64EC6FA4FB99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92E1031B-8D41-4A76-B621-64EC6FA4FB99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D90929B-54A5-4B53-AEB4-7E9DCF40430B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D90929B-54A5-4B53-AEB4-7E9DCF40430B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D90929B-54A5-4B53-AEB4-7E9DCF40430B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D90929B-54A5-4B53-AEB4-7E9DCF40430B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

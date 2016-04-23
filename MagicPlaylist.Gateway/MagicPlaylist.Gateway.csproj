@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EF495240-5530-4878-9927-7318AE70D18D}</ProjectGuid>
+    <ProjectGuid>{9D90929B-54A5-4B53-AEB4-7E9DCF40430B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MagicPlaylist.Gateway</RootNamespace>
@@ -44,8 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="IProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RadioGateway.cs" />
+    <Compile Include="SqlProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

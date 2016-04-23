@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Les informations générales relatives à un assembly dépendent de 
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
-[assembly: AssemblyTitle("MagicPlaylist.Test")]
+[assembly: AssemblyTitle("MagicPlaylist.Deezer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MagicPlaylist.Test")]
+[assembly: AssemblyProduct("MagicPlaylist.Deezer")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Le GUID suivant est pour l'ID de la typelib si ce projet est exposé à COM
-[assembly: Guid("75ab938a-3c54-45d3-a34a-b91bde424ddb")]
+[assembly: Guid("92e1031b-8d41-4a76-b621-64ec6fa4fb99")]
 
 // Les informations de version pour un assembly se composent des quatre valeurs suivantes :
 //
