@@ -23,7 +23,11 @@ namespace MagicPlaylist.Gateway
         {
             using (var connection = _provider.Create())
             {
-                return connection.Query<string>("track.GetRandom", new { total = 10}, commandType: CommandType.StoredProcedure);
+                var tracks = connection
+                        .Query<string>("track.GetRandom", new { total = 10}, 
+                        commandType: CommandType.StoredProcedure);
+
+                return tracks ?? Enumerable.Empty<string>();
             }
         }
     }

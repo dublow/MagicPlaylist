@@ -1,51 +1,49 @@
-﻿using MagicPlaylist.Deezer.Models;
-using System;
+﻿using MagicPlaylist.Deezer.Builder;
+using MagicPlaylist.Deezer.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MagicPlaylist.Deezer
 {
     public class HttpDeezer
     {
         private const string baseUri = "http://api.deezer.com/";
-
-        private readonly string _accessToken;
-        private readonly string _userId;
-
-        private HttpDeezer(string accessToken, string userId)
+        private readonly HttpWebBuilder _httpWebBuilder;
+        public HttpDeezer(HttpWebBuilder httpWebBuilder)
         {
-            this._accessToken = accessToken;
-            this._userId = userId;
+            _httpWebBuilder = httpWebBuilder;
         }
 
-        public static HttpDeezer Create(string accessToken, string userId)
+        public DeezerPlaylist AddPlaylist(string userId, string accessToken, string title)
         {
-            return new HttpDeezer(accessToken, userId);
+            var result = _httpWebBuilder
+                            .Post(GetPlaylistUri(userId, accessToken, title))
+                            .GetReponseToJson<DeezerPlaylist>();
+
+            return result;
         }
 
-        public string AddPlaylist(string title)
+        public DeezerTrack AddTracks(string accessToken, string playlistId, IEnumerable<string> tracksId)
         {
-            var result = HttpWebBuilder.Post(GetPlaylistUri(title)).GetResponse();
-            var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<DeezerPlaylist>(result);
-            return obj.Id;
+            var result = _httpWebBuilder
+                        .Post(GetTracksUri(accessToken, playlistId, tracksId))
+                        .GetResponse();
+
+            if (result != "true")
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<DeezerTrack>(result);
+
+            return new DeezerTrack { Success = true };
         }
 
-        public string AddTracks(string playlistId, IEnumerable<string> tracksId)
+        private string GetPlaylistUri(string userId, string accessToken, string title)
         {
-            return HttpWebBuilder.Post(GetTracksUri(playlistId, tracksId)).GetResponse();
+            return string.Format("{0}user/{1}/playlists?access_token={2}&title={3}", 
+                baseUri, userId, accessToken, title);
         }
 
-        private string GetPlaylistUri(string title)
+        private string GetTracksUri(string accessToken, string playlistId, IEnumerable<string> tracksId)
         {
-            return string.Format("{0}user/{1}/playlists?access_token={2}&title={3}", baseUri, _userId, _accessToken, title);
-        }
-
-        private string GetTracksUri(string playlistId, IEnumerable<string> tracksId)
-        {
-            var j = string.Join(",", tracksId);
-            return string.Format("{0}playlist/{1}/tracks?access_token={2}&songs={3}", baseUri, playlistId, _accessToken, string.Join(",", tracksId));
+            return string.Format("{0}playlist/{1}/tracks?access_token={2}&songs={3}", 
+                baseUri, playlistId, accessToken, string.Join(",", tracksId));
         }
     }
 }

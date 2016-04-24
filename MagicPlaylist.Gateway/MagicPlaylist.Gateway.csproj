@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IProvider.cs" />
+    <Compile Include="MagicPlaylistGateway.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadioGateway.cs" />
     <Compile Include="SqlProvider.cs" />

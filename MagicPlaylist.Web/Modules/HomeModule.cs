@@ -4,17 +4,13 @@ using MagicPlaylist.Web.Models;
 using Nancy;
 using Nancy.ModelBinding;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MagicPlaylist.Web.Modules
 {
     public class HomeModule : NancyModule
     {
-        public HomeModule()
+        public HomeModule(IRadioGateway radioGateway, IMagicPlaylistGateway magicPlaylistGateway, HttpDeezer httpDeezer)
         {
             Get["/"] = _ =>
             {
@@ -28,16 +24,46 @@ namespace MagicPlaylist.Web.Modules
 
             Post["/playlist"] = parameters =>
             {
-                var provider = new SqlProvider(ConfigurationManager.ConnectionStrings["radio"].ConnectionString);
-                var gateway = new RadioGateway(provider);
-                var tracks = gateway.GetRandomTracks();
-                var user = this.Bind<DeezerModel>();
-                var deezer = HttpDeezer.Create(user.AccessToken, user.Id);
-                var playlistId = deezer.AddPlaylist("MagicPlaylist");
-                var created = deezer.AddTracks(playlistId, tracks);
+                try
+                {
+                    var user = this.Bind<DeezerModel>();
 
-                return Response.AsJson(new { success = true });
+                    if (user == null || user.Id == 0)
+                        throw new ArgumentNullException("user.id", "null value");
+
+                    magicPlaylistGateway.AddOrUpdateUser(user.Id, user.Firstname, user.Lastname, user.Email,
+                        user.Gender, user.Name, user.Country, user.Lang, user.Birthday);
+
+                    var tracks = radioGateway.GetRandomTracks();
+                    if (tracks == null || !tracks.Any())
+                        return Fail();
+
+                    var deezerPlaylist = httpDeezer.AddPlaylist(user.Id.ToString(), user.AccessToken, "MagicPlaylist");
+                    if (deezerPlaylist == null && deezerPlaylist.HasError)
+                        return Fail();
+
+                    var deezerTracks = httpDeezer.AddTracks(user.AccessToken, deezerPlaylist.Id, tracks);
+                    if (deezerTracks == null && deezerTracks.HasError)
+                        return Fail();
+
+                    return Success();
+                }
+                catch (Exception ex)
+                {
+                    magicPlaylistGateway.AddError(ex.GetType().Name, ex.Message, ex.StackTrace);
+                    return Fail();
+                }
             };
+        }
+
+        private Response Fail()
+        {
+            return Response.AsJson(new { success = false }, HttpStatusCode.InternalServerError);
+        }
+
+        private Response Success()
+        {
+            return Response.AsJson(new { success = true });
         }
     }
 }
