@@ -30,8 +30,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsQuery, Version=1.3.3.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsQuery.1.3.3\lib\net40\CsQuery.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nancy, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.1.4.1\lib\net40\Nancy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nancy.Testing, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.Testing.1.4.1\lib\net40\Nancy.Testing.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -52,18 +64,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Deezer\When_use_deezer.cs" />
-    <Compile Include="Gateway\When_use_radioGateway.cs" />
+    <Compile Include="Tests\Deezer\When_use_deezer.cs" />
+    <Compile Include="Tests\Gateway\When_use_magicPlaylistGateway.cs" />
+    <Compile Include="Tests\Gateway\When_use_radioGateway.cs" />
     <Compile Include="Helpers\RandomNumber.cs" />
     <Compile Include="Mocked\Deezer\Extensions\ResponseTracksExtension.cs" />
     <Compile Include="Mocked\Deezer\MockedHttpWebBuilder.cs" />
     <Compile Include="Mocked\Deezer\MockedHttpWebRequest.cs" />
+    <Compile Include="Mocked\Gateway\Extensions\MagicPlaylistExtension.cs" />
     <Compile Include="Mocked\Gateway\Extensions\TracksExtension.cs" />
     <Compile Include="Mocked\Gateway\MockedMagicPlaylistGateway.cs" />
     <Compile Include="Mocked\Gateway\MockedRadioGateway.cs" />
     <Compile Include="Mocked\Deezer\Extensions\ResponsePlaylistExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\Web\When_call_homeModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

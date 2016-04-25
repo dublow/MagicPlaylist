@@ -21,6 +21,7 @@ namespace MagicPlaylist.Test.Mocked.Gateway
             _userTable = new Dictionary<int, UserModel>();
             _logTable = new List<ErrorModel>();
 
+            // AddOrUpdateUser
             _mockMagicPlaylistGateway
                 .Setup(x => x.AddOrUpdateUser(It.IsAny<UserModel>()))
                 .Callback<UserModel>(userModelResult => {
@@ -30,6 +31,7 @@ namespace MagicPlaylist.Test.Mocked.Gateway
                         _userTable.Add(userModelResult.Id, userModelResult);
                 });
 
+            // AddError
             _mockMagicPlaylistGateway
                 .Setup(x => x.AddError(It.IsAny<ErrorModel>()))
                 .Callback<ErrorModel>(errorModelresult => {
@@ -46,6 +48,11 @@ namespace MagicPlaylist.Test.Mocked.Gateway
         {
             _userTable.Add(userModel.Id, userModel);
             return this;
+        }
+
+        public IMagicPlaylistGateway Build()
+        {
+            return _mockMagicPlaylistGateway.Object;
         }
     }
 }

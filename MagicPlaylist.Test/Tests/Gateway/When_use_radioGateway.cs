@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MagicPlaylist.Test.Mocked.Gateway.Extensions;
 
-namespace MagicPlaylist.Test.Gateway
+namespace MagicPlaylist.Test.Tests.Gateway
 {
     [TestFixture]
     public class When_use_radioGateway

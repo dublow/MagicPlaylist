@@ -10,17 +10,17 @@ namespace MagicPlaylist.Test.Mocked.Deezer.Extensions
     {
         public static MockedHttpWebRequest SuccessTracksResponse(this MockedHttpWebRequest mockedHttpWebRequest)
         {
-            return mockedHttpWebRequest.SetResponse("true");
+            return mockedHttpWebRequest.SetResponseTracks("true");
         }
 
         public static MockedHttpWebRequest ErrorTracksInvalidPlaylistIdResponse(this MockedHttpWebRequest mockedHttpWebRequest)
         {
-            return mockedHttpWebRequest.SetResponse("{'error':{'type':'DataException','message':'no data','code':800}}");
+            return mockedHttpWebRequest.SetResponseTracks("{'error':{'type':'DataException','message':'no data','code':800}}");
         }
 
         public static MockedHttpWebRequest ErrorTracksInvalidTrackIdResponse(this MockedHttpWebRequest mockedHttpWebRequest)
         {
-            return mockedHttpWebRequest.SetResponse("{ 'error':{ 'type':'ParameterException','message':'Wrong parameter: songs','code':500} }");
+            return mockedHttpWebRequest.SetResponseTracks("{ 'error':{ 'type':'ParameterException','message':'Wrong parameter: songs','code':500} }");
         }
     }
 }

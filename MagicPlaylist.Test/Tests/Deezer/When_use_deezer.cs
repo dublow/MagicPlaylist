@@ -11,7 +11,7 @@ using MagicPlaylist.Deezer;
 using MagicPlaylist.Test.Mocked.Deezer;
 using MagicPlaylist.Test.Mocked.Deezer.Extensions;
 
-namespace MagicPlaylist.Test.Deezer
+namespace MagicPlaylist.Test.Tests.Deezer
 {
     [TestFixture]
     public class When_use_deezer
