@@ -1,11 +1,7 @@
 ﻿using MagicPlaylist.Gateway;
 using MagicPlaylist.Gateway.Models;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MagicPlaylist.Test.Mocked.Gateway
 {

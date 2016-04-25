@@ -1,12 +1,10 @@
 ﻿using MagicPlaylist.Deezer.Request;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MagicPlaylist.Test.Mocked.Deezer
 {
@@ -62,7 +60,7 @@ namespace MagicPlaylist.Test.Mocked.Deezer
 
         public MockedHttpWebRequest NullResponse()
         {
-            _mockHttpWebRequest.Setup(x => x.GetResponse()).Returns((WebResponse)null);
+            _queueStream.Enqueue(new MemoryStream());
 
             return this;
         }

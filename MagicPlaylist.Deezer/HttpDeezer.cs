@@ -25,8 +25,8 @@ namespace MagicPlaylist.Deezer
         public DeezerTrack AddTracks(string accessToken, string playlistId, IEnumerable<string> tracksId)
         {
             var result = _httpWebBuilder
-                        .Post(GetTracksUri(accessToken, playlistId, tracksId))
-                        .GetResponse();
+                            .Post(GetTracksUri(accessToken, playlistId, tracksId))
+                            .GetResponse();
 
             if (result != "true")
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<DeezerTrack>(result);

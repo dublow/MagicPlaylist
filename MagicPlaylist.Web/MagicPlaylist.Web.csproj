@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\MagicPlaylistException.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="NancyBootstrapper.cs" />
     <Compile Include="Program.cs" />
