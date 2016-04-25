@@ -20,7 +20,7 @@ namespace MagicPlaylist.Test.Tests.Deezer
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var deezer = new HttpDeezer(httpWebBuilder);
 
-            var playlist = deezer.AddPlaylist("56789", "accessToken", "MagicPlaylist");
+            var playlist = deezer.AddPlaylist(56789, "accessToken", "MagicPlaylist");
             Assert.AreEqual("12345", playlist.Id);
         }
 
@@ -35,7 +35,7 @@ namespace MagicPlaylist.Test.Tests.Deezer
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var deezer = new HttpDeezer(httpWebBuilder);
 
-            var playlist = deezer.AddPlaylist("56789", "accessToken", "MagicPlaylist");
+            var playlist = deezer.AddPlaylist(56789, "accessToken", "MagicPlaylist");
 
             Assert.IsTrue(playlist.HasError);
             Assert.AreEqual("ParameterException", playlist.Error.Type);
@@ -54,7 +54,7 @@ namespace MagicPlaylist.Test.Tests.Deezer
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var deezer = new HttpDeezer(httpWebBuilder);
 
-            var playlist = deezer.AddPlaylist("56789", "accessToken", "MagicPlaylist");
+            var playlist = deezer.AddPlaylist(56789, "accessToken", "MagicPlaylist");
             Assert.IsNull(playlist);
         }
 
@@ -69,7 +69,7 @@ namespace MagicPlaylist.Test.Tests.Deezer
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var deezer = new HttpDeezer(httpWebBuilder);
 
-            var tracks = deezer.AddTracks("accessToken", "12345", new[] { "123", "456" });
+            var tracks = deezer.AddTracks(1, "accessToken", "12345", new[] { "123", "456" });
             Assert.IsTrue(tracks.Success);
         }
 
@@ -84,7 +84,7 @@ namespace MagicPlaylist.Test.Tests.Deezer
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var deezer = new HttpDeezer(httpWebBuilder);
 
-            var tracks = deezer.AddTracks("accessToken", "12345", new[] { "123", "456" });
+            var tracks = deezer.AddTracks(1, "accessToken", "12345", new[] { "123", "456" });
 
             Assert.IsTrue(tracks.HasError);
             Assert.AreEqual("DataException", tracks.Error.Type);
@@ -103,7 +103,7 @@ namespace MagicPlaylist.Test.Tests.Deezer
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var deezer = new HttpDeezer(httpWebBuilder);
 
-            var tracks = deezer.AddTracks("accessToken", "12345", new[] { "123", "456" });
+            var tracks = deezer.AddTracks(1, "accessToken", "12345", new[] { "123", "456" });
 
             Assert.IsTrue(tracks.HasError);
             Assert.AreEqual("ParameterException", tracks.Error.Type);
@@ -122,7 +122,7 @@ namespace MagicPlaylist.Test.Tests.Deezer
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var deezer = new HttpDeezer(httpWebBuilder);
 
-            var tracks = deezer.AddTracks("accessToken", "12345", new[] { "123", "456" });
+            var tracks = deezer.AddTracks(1, "accessToken", "12345", new[] { "123", "456" });
             Assert.IsNull(tracks);
         }
     }

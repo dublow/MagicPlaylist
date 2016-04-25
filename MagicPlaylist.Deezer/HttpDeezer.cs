@@ -1,11 +1,14 @@
 ﻿using MagicPlaylist.Deezer.Builder;
 using MagicPlaylist.Deezer.Models;
+using NLog;
 using System.Collections.Generic;
 
 namespace MagicPlaylist.Deezer
 {
     public class HttpDeezer
     {
+        private static Logger logger = LogManager.GetLogger("Deezer");
+
         private const string baseUri = "http://api.deezer.com/";
         private readonly HttpWebBuilder _httpWebBuilder;
         public HttpDeezer(HttpWebBuilder httpWebBuilder)
@@ -13,28 +16,49 @@ namespace MagicPlaylist.Deezer
             _httpWebBuilder = httpWebBuilder;
         }
 
-        public DeezerPlaylist AddPlaylist(string userId, string accessToken, string title)
+        public DeezerPlaylist AddPlaylist(int userId, string accessToken, string title)
         {
-            var result = _httpWebBuilder
-                            .Post(GetPlaylistUri(userId, accessToken, title))
+            
+            try
+            {
+                logger.Info("AddPlaylist[userId:{0}]", userId);
+                var result = _httpWebBuilder
+                            .Post(GetPlaylistUri(userId, accessToken, title), userId)
                             .GetReponseToJson<DeezerPlaylist>();
 
-            return result;
+                return result;
+            }
+            catch (System.Exception ex)
+            {
+                logger.Error(ex);
+                throw;
+            }
+            
         }
 
-        public DeezerTrack AddTracks(string accessToken, string playlistId, IEnumerable<string> tracksId)
+        public DeezerTrack AddTracks(int userId, string accessToken, string playlistId, IEnumerable<string> tracksId)
         {
-            var result = _httpWebBuilder
-                            .Post(GetTracksUri(accessToken, playlistId, tracksId))
+            try
+            {
+                logger.Info("AddTracks[userId:{0}]", userId);
+                var result = _httpWebBuilder
+                            .Post(GetTracksUri(accessToken, playlistId, tracksId), userId)
                             .GetResponse();
 
-            if (result != "true")
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<DeezerTrack>(result);
+                if (result != "true")
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject<DeezerTrack>(result);
 
-            return new DeezerTrack { Success = true };
+                return new DeezerTrack { Success = true };
+            }
+            catch (System.Exception ex)
+            {
+                logger.Error(ex);
+                throw;
+            }
+            
         }
 
-        private string GetPlaylistUri(string userId, string accessToken, string title)
+        private string GetPlaylistUri(int userId, string accessToken, string title)
         {
             return string.Format("{0}user/{1}/playlists?access_token={2}&title={3}", 
                 baseUri, userId, accessToken, title);

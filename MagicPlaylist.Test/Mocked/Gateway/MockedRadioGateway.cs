@@ -21,7 +21,7 @@ namespace MagicPlaylist.Test.Mocked.Gateway
         public MockedRadioGateway SetTracks(IEnumerable<string> tracks)
         {
             _mockRadioGateway
-                .Setup(x => x.GetRandomTracks())
+                .Setup(x => x.GetRandomTracks(1))
                 .Returns(tracks);
 
             return this;

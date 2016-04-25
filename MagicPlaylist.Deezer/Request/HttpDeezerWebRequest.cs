@@ -6,6 +6,7 @@ namespace MagicPlaylist.Deezer.Request
     public class HttpDeezerWebRequest : IHttpWebRequest
     {
         private HttpWebRequest _httpWebRequest;
+        public int UserId { get; private set; }
        
         public long ContentLength
         {
@@ -46,9 +47,10 @@ namespace MagicPlaylist.Deezer.Request
             }
         }
 
-        public void Create(string uri)
+        public void Create(string uri, int userId)
         {
             _httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(uri);
+            UserId = userId;
         }
 
         public Stream GetRequestStream()

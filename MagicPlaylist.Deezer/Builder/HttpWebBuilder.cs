@@ -1,4 +1,5 @@
 ﻿using MagicPlaylist.Deezer.Request;
+using NLog;
 using System.IO;
 using System.Text;
 
@@ -6,22 +7,23 @@ namespace MagicPlaylist.Deezer.Builder
 {
     public class HttpWebBuilder : IHttpWebBuilder
     {
+        private static Logger logger = LogManager.GetLogger("Deezer");
         private readonly IHttpWebRequest _httpWebRequest;
         public HttpWebBuilder(IHttpWebRequest httpWebRequest)
         {
             _httpWebRequest = httpWebRequest;
         }
 
-        public IHttpWebBuilder Post(string uri)
+        public IHttpWebBuilder Post(string uri, int userId)
         {
-            _httpWebRequest.Create(uri);
+            _httpWebRequest.Create(uri, userId);
             _httpWebRequest.Method = "POST";
             return this;
         }
 
-        public IHttpWebBuilder Get(string uri)
+        public IHttpWebBuilder Get(string uri, int userId)
         {
-            _httpWebRequest.Create(uri);
+            _httpWebRequest.Create(uri, userId);
             _httpWebRequest.Method = "GET";
             return this;
         }
@@ -54,7 +56,9 @@ namespace MagicPlaylist.Deezer.Builder
                     return string.Empty;
                 using (var streamResponse = new StreamReader(webResponse.GetResponseStream()))
                 {
-                    return streamResponse.ReadToEnd();
+                    var response = streamResponse.ReadToEnd();
+                    logger.Info("WebResponse[userId:{0}][response:{1}]", _httpWebRequest.UserId, response);
+                    return response;
                 }
             }
         }

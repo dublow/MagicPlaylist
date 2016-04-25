@@ -16,7 +16,7 @@ namespace MagicPlaylist.Test.Tests.Gateway
                 .TracksGenerator(10)
                 .Build();
 
-            var tracks = radioGateway.GetRandomTracks();
+            var tracks = radioGateway.GetRandomTracks(1);
 
             Assert.IsTrue(tracks.Any());
             Assert.AreEqual(10, tracks.Count());
