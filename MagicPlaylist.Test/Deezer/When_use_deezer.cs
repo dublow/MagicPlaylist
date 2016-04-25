@@ -8,6 +8,8 @@ using MagicPlaylist.Test.Mocked;
 using MagicPlaylist.Deezer.Models;
 using MagicPlaylist.Deezer.Builder;
 using MagicPlaylist.Deezer;
+using MagicPlaylist.Test.Mocked.Deezer;
+using MagicPlaylist.Test.Mocked.Deezer.Extensions;
 
 namespace MagicPlaylist.Test.Deezer
 {
@@ -19,8 +21,7 @@ namespace MagicPlaylist.Test.Deezer
         {
             var httpWebRequest = MockedHttpWebRequest
                                     .Create()
-                                    .SetRequestStream()
-                                    .SetResponse("{id:12345}")
+                                    .SuccessPlaylistResponse()
                                     .Build();
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
@@ -35,8 +36,7 @@ namespace MagicPlaylist.Test.Deezer
         {
             var httpWebRequest = MockedHttpWebRequest
                                     .Create()
-                                    .SetRequestStream()
-                                    .SetResponse("{'error':{'type':'ParameterException','message':'Wrong parameter: playlistid','code':500}}")
+                                    .ErrorPlaylistResponse()
                                     .Build();
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
@@ -55,8 +55,7 @@ namespace MagicPlaylist.Test.Deezer
         {
             var httpWebRequest = MockedHttpWebRequest
                                     .Create()
-                                    .SetRequestStream()
-                                    .SetNullResponse()
+                                    .NullResponse()
                                     .Build();
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
@@ -71,8 +70,7 @@ namespace MagicPlaylist.Test.Deezer
         {
             var httpWebRequest = MockedHttpWebRequest
                                     .Create()
-                                    .SetRequestStream()
-                                    .SetResponse("true")
+                                    .SuccessTracksResponse()
                                     .Build();
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
@@ -87,8 +85,7 @@ namespace MagicPlaylist.Test.Deezer
         {
             var httpWebRequest = MockedHttpWebRequest
                                     .Create()
-                                    .SetRequestStream()
-                                    .SetResponse("{'error':{'type':'DataException','message':'no data','code':800}}")
+                                    .ErrorTracksInvalidPlaylistIdResponse()
                                     .Build();
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
@@ -107,8 +104,7 @@ namespace MagicPlaylist.Test.Deezer
         {
             var httpWebRequest = MockedHttpWebRequest
                                     .Create()
-                                    .SetRequestStream()
-                                    .SetResponse("{ 'error':{ 'type':'ParameterException','message':'Wrong parameter: songs','code':500} }")
+                                    .ErrorTracksInvalidTrackIdResponse()
                                     .Build();
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
@@ -127,8 +123,7 @@ namespace MagicPlaylist.Test.Deezer
         {
             var httpWebRequest = MockedHttpWebRequest
                                     .Create()
-                                    .SetRequestStream()
-                                    .SetNullResponse()
+                                    .NullResponse()
                                     .Build();
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);

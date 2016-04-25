@@ -8,7 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MagicPlaylist.Test.Mocked
+namespace MagicPlaylist.Test.Mocked.Deezer
 {
     public class MockedHttpWebRequest
     {
@@ -18,6 +18,7 @@ namespace MagicPlaylist.Test.Mocked
         private MockedHttpWebRequest()
         {
             _mockHttpWebRequest = new Mock<IHttpWebRequest>();
+            _mockHttpWebRequest.Setup(x => x.GetRequestStream()).Returns(new MemoryStream());
         }
 
         public static MockedHttpWebRequest Create()
@@ -28,12 +29,6 @@ namespace MagicPlaylist.Test.Mocked
         public MockedHttpWebRequest SetCreate(string uri)
         {
             this.uri = uri;
-            return this;
-        }
-
-        public MockedHttpWebRequest SetRequestStream()
-        {
-            _mockHttpWebRequest.Setup(x => x.GetRequestStream()).Returns(new MemoryStream());
             return this;
         }
 
@@ -53,7 +48,7 @@ namespace MagicPlaylist.Test.Mocked
             return this;
         }
 
-        public MockedHttpWebRequest SetNullResponse()
+        public MockedHttpWebRequest NullResponse()
         {
             _mockHttpWebRequest.Setup(x => x.GetResponse()).Returns((WebResponse)null);
 

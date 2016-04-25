@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MagicPlaylist.Web.Models
+namespace MagicPlaylist.Gateway.Models
 {
-    public class DeezerModel
+    public class UserModel
     {
         public int Id { get; set; }
         public string Email { get; set; }

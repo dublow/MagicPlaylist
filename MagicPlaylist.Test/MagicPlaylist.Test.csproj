@@ -54,9 +54,15 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Deezer\When_use_deezer.cs" />
-    <Compile Include="Mocked\MockedHttpWebBuilder.cs" />
-    <Compile Include="Mocked\MockedHttpWebRequest.cs" />
-    <Compile Include="Mocked\MockedRadioGateway.cs" />
+    <Compile Include="Gateway\When_use_radioGateway.cs" />
+    <Compile Include="Helpers\RandomNumber.cs" />
+    <Compile Include="Mocked\Deezer\Extensions\ResponseTracksExtension.cs" />
+    <Compile Include="Mocked\Deezer\MockedHttpWebBuilder.cs" />
+    <Compile Include="Mocked\Deezer\MockedHttpWebRequest.cs" />
+    <Compile Include="Mocked\Gateway\Extensions\TracksExtension.cs" />
+    <Compile Include="Mocked\Gateway\MockedMagicPlaylistGateway.cs" />
+    <Compile Include="Mocked\Gateway\MockedRadioGateway.cs" />
+    <Compile Include="Mocked\Deezer\Extensions\ResponsePlaylistExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +85,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

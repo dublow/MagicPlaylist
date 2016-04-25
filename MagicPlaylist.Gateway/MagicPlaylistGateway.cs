@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using System.Data;
+using MagicPlaylist.Gateway.Models;
 
 namespace MagicPlaylist.Gateway
 {
     public interface IMagicPlaylistGateway
     {
-        void AddOrUpdateUser(int id, string firstname, string lastname, string email, 
-            string gender, string name, string country, string lang, string birthday);
-        void AddError(string errorType, string message, string stackTrace);
+        void AddOrUpdateUser(UserModel user);
+        void AddError(ErrorModel error);
     }
     public class MagicPlaylistGateway : IMagicPlaylistGateway
     {
@@ -22,35 +22,34 @@ namespace MagicPlaylist.Gateway
             this._provider = provider;
         }
 
-        public void AddOrUpdateUser(int id, string firstname, string lastname, string email,
-            string gender, string name, string country, string lang, string birthday)
+        public void AddOrUpdateUser(UserModel user)
         {
             using (var connection = _provider.Create())
             {
                 connection.Execute("user.AddOrUpdate", new
                     {
-                        Id = id,
-                        Firstname = firstname,
-                        Lastname = lastname,
-                        Email = email,
-                        Gender = gender,
-                        Name = name,
-                        Country = country,
-                        Lang = lang,
-                        Birthday = birthday,
+                        Id = user.Id,
+                        Firstname = user.Firstname,
+                        Lastname = user.Lastname,
+                        Email = user.Email,
+                        Gender = user.Gender,
+                        Name = user.Name,
+                        Country = user.Country,
+                        Lang = user.Lang,
+                        Birthday = user.Birthday,
                 }, commandType: CommandType.StoredProcedure);
             }
         }
 
-        public void AddError(string errorType, string message, string stackTrace)
+        public void AddError(ErrorModel error)
         {
             using (var connection = _provider.Create())
             {
                 connection.Execute("log.AddError", new
                 {
-                   ErrorType = errorType,
-                   Message = message,
-                   StackTrace = stackTrace
+                   ErrorType = error.errorType,
+                   Message = error.message,
+                   StackTrace = error.stackTrace
                 }, commandType: CommandType.StoredProcedure);
             }
         }

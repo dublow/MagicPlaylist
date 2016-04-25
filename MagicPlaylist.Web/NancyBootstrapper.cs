@@ -4,7 +4,6 @@ using System.Configuration;
 using MagicPlaylist.Gateway;
 using MagicPlaylist.Deezer.Request;
 using MagicPlaylist.Deezer.Builder;
-using MagicPlaylist.Web.Validators;
 
 namespace MagicPlaylist.Web
 {
@@ -22,7 +21,6 @@ namespace MagicPlaylist.Web
 
             container.Register(radioGateway);
             container.Register(magicPlaylistGateway);
-            container.Register(new DeezerModelValidator());
             container.Register<IHttpWebRequest, HttpDeezerWebRequest>();
             container.Register<IHttpWebBuilder, HttpWebBuilder>();
         }

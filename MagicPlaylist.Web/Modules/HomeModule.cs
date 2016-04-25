@@ -1,6 +1,6 @@
 ﻿using MagicPlaylist.Deezer;
 using MagicPlaylist.Gateway;
-using MagicPlaylist.Web.Models;
+using MagicPlaylist.Gateway.Models;
 using Nancy;
 using Nancy.ModelBinding;
 using System;
@@ -26,13 +26,12 @@ namespace MagicPlaylist.Web.Modules
             {
                 try
                 {
-                    var user = this.Bind<DeezerModel>();
+                    var user = this.Bind<UserModel>();
 
                     if (user == null || user.Id == 0)
                         throw new ArgumentNullException("user.id", "null value");
 
-                    magicPlaylistGateway.AddOrUpdateUser(user.Id, user.Firstname, user.Lastname, user.Email,
-                        user.Gender, user.Name, user.Country, user.Lang, user.Birthday);
+                    magicPlaylistGateway.AddOrUpdateUser(user);
 
                     var tracks = radioGateway.GetRandomTracks();
                     if (tracks == null || !tracks.Any())
@@ -50,7 +49,8 @@ namespace MagicPlaylist.Web.Modules
                 }
                 catch (Exception ex)
                 {
-                    magicPlaylistGateway.AddError(ex.GetType().Name, ex.Message, ex.StackTrace);
+                    var error = new ErrorModel(ex.GetType().Name, ex.Message, ex.StackTrace);
+                    magicPlaylistGateway.AddError(error);
                     return Fail();
                 }
             };
