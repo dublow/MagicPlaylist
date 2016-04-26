@@ -4,6 +4,7 @@ using System.Configuration;
 using MagicPlaylist.Gateway;
 using MagicPlaylist.Deezer.Request;
 using MagicPlaylist.Deezer.Builder;
+using NLog.Config;
 
 namespace MagicPlaylist.Web
 {
@@ -23,6 +24,8 @@ namespace MagicPlaylist.Web
             container.Register(magicPlaylistGateway);
             container.Register<IHttpWebRequest, HttpDeezerWebRequest>();
             container.Register<IHttpWebBuilder, HttpWebBuilder>();
+
+           
         }
     }
 

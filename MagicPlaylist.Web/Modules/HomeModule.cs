@@ -1,4 +1,6 @@
-﻿using MagicPlaylist.Deezer;
+﻿using MagicPlaylist.Common.Loggers;
+using MagicPlaylist.Common.Profilers;
+using MagicPlaylist.Deezer;
 using MagicPlaylist.Gateway;
 using MagicPlaylist.Gateway.Models;
 using MagicPlaylist.Web.Exceptions;
@@ -17,59 +19,70 @@ namespace MagicPlaylist.Web.Modules
         {
             Get["/"] = _ =>
             {
-                logger.Info("Enter Home");
-                return View["index.html"];
+                using (var smartTimer = new SmartTimer((x, u) => ModuleLoggerInfo("Exit Home", x.Elapsed)))
+                {
+                    ModuleLoggerInfo("Exit Home");
+                    return View["index.html"];
+                }    
             };
 
             Get["/channel"] = _ =>
             {
-                logger.Info("Enter Channel");
-                return View["channel.html"];
+                using (var smartTimer = new SmartTimer((x, u) => ModuleLoggerInfo("Exit Channel", x.Elapsed)))
+                {
+                    ModuleLoggerInfo("Enter Channel");
+                    return View["channel.html"];
+                }
             };
 
             Post["/playlist"] = parameters =>
             {
                 try
                 {
-                    logger.Info("Enter Playlist");
+                    using (var smartTimer = new SmartTimer((x, u) => ModuleLoggerInfo("Exit Playlist", u, x.Elapsed)))
+                    {
+                        ModuleLoggerInfo("Enter Playlist");
 
-                    // Manage user
-                    var user = this.Bind<UserModel>();
+                        // Manage user
+                        var user = this.Bind<UserModel>();
 
-                    if (user == null || user.Id == 0)
-                        throw new MagicPlaylistException("UserId is null or empty");
+                        if (user == null || user.Id == 0)
+                            throw new MagicPlaylistException("UserId is null or empty");
 
-                    if(string.IsNullOrEmpty(user.AccessToken))
-                        throw new MagicPlaylistException(user.Id, "AccessToken is null or empty");
+                        smartTimer.SetUserId(user.Id);
 
-                    if(!magicPlaylistGateway.CanAddPlaylist(user.Id))
-                        throw new MagicPlaylistException(user.Id, "User can't add playlist");
+                        if (string.IsNullOrEmpty(user.AccessToken))
+                            throw new MagicPlaylistException(user.Id, "AccessToken is null or empty");
 
-                    magicPlaylistGateway.AddOrUpdateUser(user);
+                        if (!magicPlaylistGateway.CanAddPlaylist(user.Id))
+                            throw new MagicPlaylistException(user.Id, "User can't add playlist");
 
-                    // Get tracks
-                    var tracks = radioGateway.GetRandomTracks(user.Id);
-                    if (tracks == null || !tracks.Any())
-                        throw new MagicPlaylistException(user.Id, "Tracks is null or empty");
+                        magicPlaylistGateway.AddOrUpdateUser(user);
 
-                    // Add playlist
-                    var deezerPlaylist = httpDeezer.AddPlaylist(user.Id, user.AccessToken, "MagicPlaylist");
-                    if (deezerPlaylist == null)
-                        throw new MagicPlaylistException(user.Id, "DeezerPlaylist is null");
-                    else if(deezerPlaylist.HasError)
-                        throw new MagicPlaylistException(user.Id, string.Format("DeezerPlaylist error:[{0}][{1}][{2}]", 
-                            deezerPlaylist.Error.Type, deezerPlaylist.Error.Message, deezerPlaylist.Error.Code));
+                        // Get tracks
+                        var tracks = radioGateway.GetRandomTracks(user.Id);
+                        if (tracks == null || !tracks.Any())
+                            throw new MagicPlaylistException(user.Id, "DbTracks is null or empty");
 
-                    // Add tracks
-                    var deezerTracks = httpDeezer.AddTracks(user.Id, user.AccessToken, deezerPlaylist.Id, tracks);
-                    if (deezerTracks == null)
-                        throw new MagicPlaylistException(user.Id, "DeezerTracks is null");
-                    else if (deezerTracks.HasError)
-                        throw new MagicPlaylistException(user.Id, string.Format("DeezerTracks error:[{0}][{1}][{2}]",
-                            deezerTracks.Error.Type, deezerTracks.Error.Message, deezerTracks.Error.Code));
+                        // Add playlist
+                        var deezerPlaylist = httpDeezer.AddPlaylist(user.Id, user.AccessToken, "MagicPlaylist");
+                        if (deezerPlaylist == null)
+                            throw new MagicPlaylistException(user.Id, "DeezerPlaylist is null");
+                        else if (deezerPlaylist.HasError)
+                            throw new MagicPlaylistException(user.Id, string.Format("DeezerPlaylist error:[{0}][{1}][{2}]",
+                                deezerPlaylist.Error.Type, deezerPlaylist.Error.Message, deezerPlaylist.Error.Code));
 
-                    logger.Info("[userId:{0}]Exit Playlist", user.Id);
-                    return Success(deezerPlaylist.PlaylistUrl);
+                        // Add tracks
+                        var deezerTracks = httpDeezer.AddTracks(user.Id, user.AccessToken, deezerPlaylist.Id, tracks);
+                        if (deezerTracks == null)
+                            throw new MagicPlaylistException(user.Id, "DeezerTracks is null");
+                        else if (deezerTracks.HasError)
+                            throw new MagicPlaylistException(user.Id, string.Format("DeezerTracks error:[{0}][{1}][{2}]",
+                                deezerTracks.Error.Type, deezerTracks.Error.Message, deezerTracks.Error.Code));
+
+
+                        return Success(deezerPlaylist.PlaylistUrl);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -90,5 +103,22 @@ namespace MagicPlaylist.Web.Modules
         {
             return Response.AsJson(new { success = true, playlistUrl = playlistUrl });
         }
+
+        private void ModuleLoggerInfo(string message)
+        {
+            logger.Info(LoggerCreator.Info("Module", message));
+        }
+
+        private void ModuleLoggerInfo(string message, TimeSpan elasped)
+        {
+            logger.Info(LoggerCreator.Info("Module", message, elasped));
+        }
+
+        private void ModuleLoggerInfo(string message, int userId, TimeSpan elasped)
+        {
+            logger.Info(LoggerCreator.Info("Module", message, userId, elasped));
+        }
+
+        
     }
 }

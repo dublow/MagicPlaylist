@@ -1,5 +1,8 @@
-﻿using MagicPlaylist.Deezer.Request;
+﻿using MagicPlaylist.Common.Loggers;
+using MagicPlaylist.Common.Profilers;
+using MagicPlaylist.Deezer.Request;
 using NLog;
+using System;
 using System.IO;
 using System.Text;
 
@@ -50,17 +53,30 @@ namespace MagicPlaylist.Deezer.Builder
         }
         public string GetResponse()
         {
-            using (var webResponse = _httpWebRequest.GetResponse())
+            using (var smartTimer = new SmartTimer((x, u) => DeezerLoggerInfo("Exit WebResponse", _httpWebRequest.UserId, x.Elapsed)))
             {
-                if (webResponse == null)
-                    return string.Empty;
-                using (var streamResponse = new StreamReader(webResponse.GetResponseStream()))
+                using (var webResponse = _httpWebRequest.GetResponse())
                 {
-                    var response = streamResponse.ReadToEnd();
-                    logger.Info("[userId:{0}]WebResponse[response:{1}]", _httpWebRequest.UserId, response);
-                    return response;
+                    if (webResponse == null)
+                        return string.Empty;
+                    using (var streamResponse = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        var response = streamResponse.ReadToEnd();
+                        DeezerLoggerInfo(string.Format("WebResponse[response:{0}]", response), _httpWebRequest.UserId);
+                        return response;
+                    }
                 }
             }
+        }
+
+        private void DeezerLoggerInfo(string message, int userId, TimeSpan elasped)
+        {
+            logger.Info(LoggerCreator.Info("Deezer", message, userId, elasped));
+        }
+
+        private void DeezerLoggerInfo(string message, int userId)
+        {
+            logger.Info(LoggerCreator.Info("Deezer", message, userId));
         }
     }
 }

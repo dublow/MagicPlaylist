@@ -61,7 +61,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\MagicPlaylist.Common\MagicPlaylist.Common.csproj">
+      <Project>{e7bac899-6166-406d-8b07-0777c8a5c669}</Project>
+      <Name>MagicPlaylist.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

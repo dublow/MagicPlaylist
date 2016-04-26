@@ -3,6 +3,9 @@ using System.Data;
 using MagicPlaylist.Gateway.Models;
 using NLog;
 using System.Linq;
+using MagicPlaylist.Common.Profilers;
+using MagicPlaylist.Common.Loggers;
+using System;
 
 namespace MagicPlaylist.Gateway
 {
@@ -26,16 +29,20 @@ namespace MagicPlaylist.Gateway
         {
             try
             {
-                logger.Info("[userId:{0}]CanAddPlaylist", userId);
-                using (var connection = _provider.Create())
+                
+                using (var smartTimer = new SmartTimer((x, u) => GatewayLoggerInfo("Exit CanAddPlaylist", userId, x.Elapsed)))
                 {
-                    var parameters = new DynamicParameters();
-                    parameters.Add("@userId", userId);
-                    parameters.Add("@canAdd", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                    GatewayLoggerInfo("CanAddPlaylist", userId);
+                    using (var connection = _provider.Create())
+                    {
+                        var parameters = new DynamicParameters();
+                        parameters.Add("@userId", userId);
+                        parameters.Add("@canAdd", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
-                    connection.Execute("user.CanAddPlaylist", parameters, commandType: CommandType.StoredProcedure);
+                        connection.Execute("user.CanAddPlaylist", parameters, commandType: CommandType.StoredProcedure);
 
-                    return parameters.Get<bool>("@canAdd");
+                        return parameters.Get<bool>("@canAdd");
+                    }
                 }
             }
             catch (System.Exception ex)
@@ -48,21 +55,24 @@ namespace MagicPlaylist.Gateway
         {
             try
             {
-                logger.Info("[userId:{0}]AddOrUpdateUser", user.Id);
-                using (var connection = _provider.Create())
+                using (var smartTimer = new SmartTimer((x,u) => GatewayLoggerInfo("Exit AddOrUpdateUser", user.Id, x.Elapsed)))
                 {
-                    connection.Execute("user.AddOrUpdate", new
+                    GatewayLoggerInfo("AddOrUpdateUser", user.Id);
+                    using (var connection = _provider.Create())
                     {
-                        Id = user.Id,
-                        Firstname = user.Firstname,
-                        Lastname = user.Lastname,
-                        Email = user.Email,
-                        Gender = user.Gender,
-                        Name = user.Name,
-                        Country = user.Country,
-                        Lang = user.Lang,
-                        Birthday = user.Birthday,
-                    }, commandType: CommandType.StoredProcedure);
+                        connection.Execute("user.AddOrUpdate", new
+                        {
+                            Id = user.Id,
+                            Firstname = user.Firstname,
+                            Lastname = user.Lastname,
+                            Email = user.Email,
+                            Gender = user.Gender,
+                            Name = user.Name,
+                            Country = user.Country,
+                            Lang = user.Lang,
+                            Birthday = user.Birthday,
+                        }, commandType: CommandType.StoredProcedure);
+                    }
                 }
             }
             catch (System.Exception ex)
@@ -76,15 +86,19 @@ namespace MagicPlaylist.Gateway
         {
             try
             {
-                logger.Info("[type:{0}]AddError", error.errorType);
-                using (var connection = _provider.Create())
+                
+                using (var smartTimer = new SmartTimer((x, u) => GatewayLoggerInfo(string.Format("Exit AddError", error.errorType), x.Elapsed)))
                 {
-                    connection.Execute("log.AddError", new
+                    GatewayLoggerInfo(string.Format("[type:{0}]AddError", error.errorType));
+                    using (var connection = _provider.Create())
                     {
-                        ErrorType = error.errorType,
-                        Message = error.message,
-                        StackTrace = error.stackTrace
-                    }, commandType: CommandType.StoredProcedure);
+                        connection.Execute("log.AddError", new
+                        {
+                            ErrorType = error.errorType,
+                            Message = error.message,
+                            StackTrace = error.stackTrace
+                        }, commandType: CommandType.StoredProcedure);
+                    }
                 }
             }
             catch (System.Exception ex)
@@ -92,7 +106,25 @@ namespace MagicPlaylist.Gateway
                 logger.Error(ex);
                 throw;
             }
-            
+        }
+
+        private void GatewayLoggerInfo(string message)
+        {
+            logger.Info(LoggerCreator.Info("Gateway", message));
+        }
+
+        private void GatewayLoggerInfo(string message, TimeSpan elasped)
+        {
+            logger.Info(LoggerCreator.Info("Gateway", message, elasped));
+        }
+
+        private void GatewayLoggerInfo(string message, int userId)
+        {
+            logger.Info(LoggerCreator.Info("Gateway", message, userId));
+        }
+        private void GatewayLoggerInfo(string message, int userId, TimeSpan elasped)
+        {
+            logger.Info(LoggerCreator.Info("Gateway", message, userId, elasped));
         }
     }
 }

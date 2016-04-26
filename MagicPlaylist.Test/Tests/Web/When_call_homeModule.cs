@@ -333,7 +333,7 @@ namespace MagicPlaylist.Test.Tests.Web
             Assert.AreEqual(1, logTable.Count);
             Assert.IsNotNull(error);
             Assert.AreEqual("MagicPlaylistException", error.errorType);
-            Assert.AreEqual("Tracks is null or empty", error.message);
+            Assert.AreEqual("DbTracks is null or empty", error.message);
             Assert.IsNotEmpty(error.stackTrace);
             Assert.AreEqual(1, mockedMagicPlaylistGateway._userTable.Count);
 

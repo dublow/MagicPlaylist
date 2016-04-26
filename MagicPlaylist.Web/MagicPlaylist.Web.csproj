@@ -105,6 +105,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MagicPlaylist.Common\MagicPlaylist.Common.csproj">
+      <Project>{e7bac899-6166-406d-8b07-0777c8a5c669}</Project>
+      <Name>MagicPlaylist.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MagicPlaylist.Deezer\MagicPlaylist.Deezer.csproj">
       <Project>{92e1031b-8d41-4a76-b621-64ec6fa4fb99}</Project>
       <Name>MagicPlaylist.Deezer</Name>
@@ -116,6 +120,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Content\Images\toSuccess.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Content\Images\favicon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

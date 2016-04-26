@@ -3,6 +3,9 @@ using System.Linq;
 using Dapper;
 using System.Data;
 using NLog;
+using MagicPlaylist.Common.Profilers;
+using MagicPlaylist.Common.Loggers;
+using System;
 
 namespace MagicPlaylist.Gateway
 {
@@ -21,16 +24,21 @@ namespace MagicPlaylist.Gateway
         }
         public IEnumerable<string> GetRandomTracks(int userId)
         {
+
             try
             {
-                logger.Info("[userId:{0}]GetRandomTracks", userId);
-                using (var connection = _provider.Create())
+                using (var smartTimer = new SmartTimer((x, u) => GatewayLoggerInfo("Exit GetRandomTracks", userId, x.Elapsed)))
                 {
-                    var tracks = connection
-                            .Query<string>("track.GetRandom", new { total = 10 },
-                            commandType: CommandType.StoredProcedure);
+                    GatewayLoggerInfo("GetRandomTracks", userId);
+                    
+                    using (var connection = _provider.Create())
+                    {
+                        var tracks = connection
+                                .Query<string>("track.GetRandom", new { total = 10 },
+                                commandType: CommandType.StoredProcedure);
 
-                    return tracks ?? Enumerable.Empty<string>();
+                        return tracks ?? Enumerable.Empty<string>();
+                    }
                 }
             }
             catch (System.Exception ex)
@@ -38,7 +46,25 @@ namespace MagicPlaylist.Gateway
                 logger.Error(ex);
                 throw;
             }
-            
+        }
+
+        private void GatewayLoggerInfo(string message)
+        {
+            logger.Info(LoggerCreator.Info("Gateway", message));
+        }
+
+        private void GatewayLoggerInfo(string message, TimeSpan elasped)
+        {
+            logger.Info(LoggerCreator.Info("Gateway", message, elasped));
+        }
+
+        private void GatewayLoggerInfo(string message, int userId)
+        {
+            logger.Info(LoggerCreator.Info("Gateway", message, userId));
+        }
+        private void GatewayLoggerInfo(string message, int userId, TimeSpan elasped)
+        {
+            logger.Info(LoggerCreator.Info("Gateway", message, userId, elasped));
         }
     }
 }
