@@ -22,6 +22,7 @@ namespace MagicPlaylist.Test.Tests.Deezer
 
             var playlist = deezer.AddPlaylist(56789, "accessToken", "MagicPlaylist");
             Assert.AreEqual("12345", playlist.Id);
+            Assert.AreEqual("https://www.deezer.com/playlist/12345", playlist.PlaylistUrl);
         }
 
         [Test]

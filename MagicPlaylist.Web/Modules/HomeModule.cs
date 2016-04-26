@@ -66,7 +66,7 @@ namespace MagicPlaylist.Web.Modules
                             deezerTracks.Error.Type, deezerTracks.Error.Message, deezerTracks.Error.Code));
 
                     logger.Info("Exit Playlist[userId:{0}]", user.Id);
-                    return Success();
+                    return Success(deezerPlaylist.PlaylistUrl);
                 }
                 catch (Exception ex)
                 {
@@ -83,9 +83,9 @@ namespace MagicPlaylist.Web.Modules
             return Response.AsJson(new { success = false }, HttpStatusCode.InternalServerError);
         }
 
-        private Response Success()
+        private Response Success(string playlistUrl)
         {
-            return Response.AsJson(new { success = true });
+            return Response.AsJson(new { success = true, playlistUrl = playlistUrl });
         }
     }
 }

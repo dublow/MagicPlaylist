@@ -100,7 +100,7 @@ namespace MagicPlaylist.Test.Tests.Web
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Assert.AreEqual("application/json; charset=utf-8", response.ContentType);
-            Assert.AreEqual("{\"success\":true}", response.Body.AsString());
+            Assert.AreEqual("{\"success\":true,\"playlistUrl\":\"https://www.deezer.com/playlist/12345\"}", response.Body.AsString());
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace MagicPlaylist.Test.Tests.Web
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Assert.AreEqual("application/json; charset=utf-8", response.ContentType);
-            Assert.AreEqual("{\"success\":true}", response.Body.AsString());
+            Assert.AreEqual("{\"success\":true,\"playlistUrl\":\"https://www.deezer.com/playlist/12345\"}", response.Body.AsString());
         }
 
         [Test]

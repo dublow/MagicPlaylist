@@ -1,31 +1,51 @@
 ﻿var magicPlaylist = (function ($, data) {
-    return {
+    var that;
+    var public = {
+        init: function () {
+            that = private;
+            that.rotate.toStart();
+            that.deezer.init();
+            $('.dz-login').click(that.deezer.login);
+        }
+    };
+    var private = {
         rotate: {
-            start: function (className, cb) {
-
-                var stepFcn = function (angle) {
-                    var stop = false;
-                    if (!stop && angle > 358) {
-                        $('#first').addClass('hide');
-                        $('#second').removeClass('hide');
-                        stop = true;
-                    }
+            stepStop: function (showId, hideId, angle, limit, cb) {
+                var stop = false;
+                var isLimit = limit < 0 ? angle < limit : angle > limit
+                if (!stop && isLimit) {
+                    $(hideId).addClass('hide');
+                    $(showId).removeClass('hide');
+                    stop = true;
+                    if (cb)
+                        cb();
                 }
-
-                var mouseOverFcn = function (step) {
-                    return function () {
-                        $(this).rotate({
-                            animateTo: 360,
-                            easing: $.easing.easeInOutElastic,
-                            step: step
-                        })
-                    }
-                }
-
-                $('.' + className).rotate({
+            },
+            toStart: function () {
+                $('#toInit').rotate({
                     bind: {
-                        mouseover: mouseOverFcn(stepFcn)
+                        mouseover: function () {
+                            $(this).rotate({
+                                animateTo: 360,
+                                easing: $.easing.easeInOutElastic,
+                                step: function (angle) { that.rotate.stepStop("#toStart", '#toInit', angle, 358) }
+                            })
+                        }
                     }
+                });
+            },
+            toSuccess: function (cb) {
+                $("#toStart").rotate({
+                    angle: 0,
+                    animateTo: -360,
+                    step: function (angle) { that.rotate.stepStop('#toSuccess', '#toStart', angle, -358, cb) }
+                });
+            },
+            toError: function () {
+                $("#toStart").rotate({
+                    angle: 0,
+                    animateTo: -360,
+                    step: function (angle) { that.rotate.stepStop('#toError', '#toStart', angle, -358) }
                 });
             }
         },
@@ -35,8 +55,6 @@
                     appId: data.apiKey,
                     channelUrl: 'http://localhost:3000/channel'
                 });
-
-
             },
             login: function () {
                 DZ.login(function (response) {
@@ -51,65 +69,26 @@
                                 type: "POST",
                                 url: '/playlist',
                                 data: response,
-                                success: function (result) {
-                                    if (result.success) {
-                                        var stepFcn = function (angle) {
-                                            var stop = false;
-                                            if (!stop && angle < -358) {
-                                                $('#second').addClass('hide');
-                                                $('#third').removeClass('hide');
-                                                stop = true;
-                                            }
-                                        }
-
-                                        $(".logo2").rotate({
-                                            angle: 0,
-                                            animateTo: -360,
-                                            step: stepFcn
-                                        });
-                                        
-                                    }
+                                success: function(result){
+                                    that.rotate.toSuccess(function () {
+                                        $('.dz-playlist').attr("href", result.playlistUrl);
+                                    })
                                 },
+                                error: that.rotate.toError,
                                 dataType: 'json'
                             });
-
-                            
                         });
                     } else {
+                        that.rotate.toError()
                         console.log('User cancelled login or did not fully authorize.');
                     }
                 }, { perms: 'basic_access,email, manage_library' });
             }
         }
-    }
+    }    
+    return public;
 }(jQuery, { apiKey: '170341' }))
 
 $(document).ready(function () {
-    magicPlaylist.rotate.start("logo");
-    magicPlaylist.deezer.init();
-    $('.dz-login').click(magicPlaylist.deezer.login);
+    magicPlaylist.init();
 });
-
-//$(".logo")
-//	  	.rotate({
-//	  	    bind: {
-//	  	        mouseover: function () {
-//	  	            $(this).rotate({
-//	  	                animateTo: 360,
-//	  	                easing: $.easing.easeInOutElastic,
-//	  	                callback: function () {
-
-//	  	                },
-//	  	                step: function (angle) {
-//	  	                    var stop = false;
-//	  	                    if (!stop && angle > 358) {
-//	  	                        $('#first').addClass('hide');
-//	  	                        $('#second').removeClass('hide');
-//	  	                        stop = true;
-//	  	                    }
-
-//	  	                }
-//	  	            })
-//	  	        }
-//	  	    }
-//	  	});
