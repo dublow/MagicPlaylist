@@ -21,7 +21,7 @@ namespace MagicPlaylist.Deezer
             
             try
             {
-                logger.Info("AddPlaylist[userId:{0}]", userId);
+                logger.Info("[userId:{0}]AddPlaylist", userId);
                 var result = _httpWebBuilder
                             .Post(GetPlaylistUri(userId, accessToken, title), userId)
                             .GetReponseToJson<DeezerPlaylist>();
@@ -40,7 +40,7 @@ namespace MagicPlaylist.Deezer
         {
             try
             {
-                logger.Info("AddTracks[userId:{0}]", userId);
+                logger.Info("[userId:{0}]AddTracks", userId);
                 var result = _httpWebBuilder
                             .Post(GetTracksUri(accessToken, playlistId, tracksId), userId)
                             .GetResponse();

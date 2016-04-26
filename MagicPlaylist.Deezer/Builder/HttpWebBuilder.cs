@@ -57,7 +57,7 @@ namespace MagicPlaylist.Deezer.Builder
                 using (var streamResponse = new StreamReader(webResponse.GetResponseStream()))
                 {
                     var response = streamResponse.ReadToEnd();
-                    logger.Info("WebResponse[userId:{0}][response:{1}]", _httpWebRequest.UserId, response);
+                    logger.Info("[userId:{0}]WebResponse[response:{1}]", _httpWebRequest.UserId, response);
                     return response;
                 }
             }

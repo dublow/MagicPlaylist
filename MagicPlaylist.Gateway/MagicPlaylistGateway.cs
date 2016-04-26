@@ -2,11 +2,13 @@
 using System.Data;
 using MagicPlaylist.Gateway.Models;
 using NLog;
+using System.Linq;
 
 namespace MagicPlaylist.Gateway
 {
     public interface IMagicPlaylistGateway
     {
+        bool CanAddPlaylist(int userId);
         void AddOrUpdateUser(UserModel user);
         void AddError(ErrorModel error);
     }
@@ -20,11 +22,33 @@ namespace MagicPlaylist.Gateway
             this._provider = provider;
         }
 
+        public bool CanAddPlaylist(int userId)
+        {
+            try
+            {
+                logger.Info("[userId:{0}]CanAddPlaylist", userId);
+                using (var connection = _provider.Create())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@userId", userId);
+                    parameters.Add("@canAdd", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
+                    connection.Execute("user.CanAddPlaylist", parameters, commandType: CommandType.StoredProcedure);
+
+                    return parameters.Get<bool>("@canAdd");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                logger.Error(ex);
+                throw;
+            }
+        }
         public void AddOrUpdateUser(UserModel user)
         {
             try
             {
-                logger.Info("AddOrUpdateUser[userId:{0}]", user.Id);
+                logger.Info("[userId:{0}]AddOrUpdateUser", user.Id);
                 using (var connection = _provider.Create())
                 {
                     connection.Execute("user.AddOrUpdate", new
@@ -46,14 +70,13 @@ namespace MagicPlaylist.Gateway
                 logger.Error(ex);
                 throw;
             }
-            
         }
 
         public void AddError(ErrorModel error)
         {
             try
             {
-                logger.Info("AddError:[type:{0}]", error.errorType);
+                logger.Info("[type:{0}]AddError", error.errorType);
                 using (var connection = _provider.Create())
                 {
                     connection.Execute("log.AddError", new

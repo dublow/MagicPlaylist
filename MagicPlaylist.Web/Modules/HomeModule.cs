@@ -40,32 +40,35 @@ namespace MagicPlaylist.Web.Modules
                         throw new MagicPlaylistException("UserId is null or empty");
 
                     if(string.IsNullOrEmpty(user.AccessToken))
-                        throw new MagicPlaylistException("AccessToken is null or empty");
+                        throw new MagicPlaylistException(user.Id, "AccessToken is null or empty");
+
+                    if(!magicPlaylistGateway.CanAddPlaylist(user.Id))
+                        throw new MagicPlaylistException(user.Id, "User can't add playlist");
 
                     magicPlaylistGateway.AddOrUpdateUser(user);
 
                     // Get tracks
                     var tracks = radioGateway.GetRandomTracks(user.Id);
                     if (tracks == null || !tracks.Any())
-                        throw new MagicPlaylistException("Tracks is null or empty");
+                        throw new MagicPlaylistException(user.Id, "Tracks is null or empty");
 
                     // Add playlist
                     var deezerPlaylist = httpDeezer.AddPlaylist(user.Id, user.AccessToken, "MagicPlaylist");
                     if (deezerPlaylist == null)
-                        throw new MagicPlaylistException("DeezerPlaylist is null");
+                        throw new MagicPlaylistException(user.Id, "DeezerPlaylist is null");
                     else if(deezerPlaylist.HasError)
-                        throw new MagicPlaylistException(string.Format("DeezerPlaylist error:[{0}][{1}][{2}]", 
+                        throw new MagicPlaylistException(user.Id, string.Format("DeezerPlaylist error:[{0}][{1}][{2}]", 
                             deezerPlaylist.Error.Type, deezerPlaylist.Error.Message, deezerPlaylist.Error.Code));
 
                     // Add tracks
                     var deezerTracks = httpDeezer.AddTracks(user.Id, user.AccessToken, deezerPlaylist.Id, tracks);
                     if (deezerTracks == null)
-                        throw new MagicPlaylistException("DeezerTracks is null");
+                        throw new MagicPlaylistException(user.Id, "DeezerTracks is null");
                     else if (deezerTracks.HasError)
-                        throw new MagicPlaylistException(string.Format("DeezerTracks error:[{0}][{1}][{2}]",
+                        throw new MagicPlaylistException(user.Id, string.Format("DeezerTracks error:[{0}][{1}][{2}]",
                             deezerTracks.Error.Type, deezerTracks.Error.Message, deezerTracks.Error.Code));
 
-                    logger.Info("Exit Playlist[userId:{0}]", user.Id);
+                    logger.Info("[userId:{0}]Exit Playlist", user.Id);
                     return Success(deezerPlaylist.PlaylistUrl);
                 }
                 catch (Exception ex)

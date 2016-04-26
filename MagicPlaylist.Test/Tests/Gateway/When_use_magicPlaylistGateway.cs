@@ -13,6 +13,7 @@ namespace MagicPlaylist.Test.Tests.Gateway
         {
             var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
                 .Create()
+                .CanAddPlaylist(true)
                 .AddFastUser(1, "Nicolas", "Delfour", "nicolas.delfour@test.com");
 
             var magicPlaylistGateway = mockedMagicPlaylistGateway.Build();
@@ -39,6 +40,7 @@ namespace MagicPlaylist.Test.Tests.Gateway
         {
             var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
                 .Create()
+                .CanAddPlaylist(true)
                 .AddFastUser(1, "Nicolas", "Delfour", "nicolas.delfour@test.com");
 
             var magicPlaylistGateway = mockedMagicPlaylistGateway.Build();
@@ -64,7 +66,10 @@ namespace MagicPlaylist.Test.Tests.Gateway
         [Test]
         public void When_add_error()
         {
-            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway.Create();
+            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
+                                                .Create()
+                                                .CanAddPlaylist(true);
+
             var magicPlaylistGateway = mockedMagicPlaylistGateway.Build();
 
             var error = new ErrorModel("Exception", "Invalid fake data", string.Empty);

@@ -40,6 +40,13 @@ namespace MagicPlaylist.Test.Mocked.Gateway
             return new MockedMagicPlaylistGateway();
         }
 
+        public MockedMagicPlaylistGateway CanAddPlaylist(bool value)
+        {
+            _mockMagicPlaylistGateway
+                .Setup(x => x.CanAddPlaylist(It.IsAny<int>()))
+                .Returns(value);
+            return this;
+        }
         public MockedMagicPlaylistGateway AddUser(UserModel userModel)
         {
             _userTable.Add(userModel.Id, userModel);

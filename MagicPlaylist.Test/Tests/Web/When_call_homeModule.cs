@@ -53,7 +53,9 @@ namespace MagicPlaylist.Test.Tests.Web
         [Test]
         public void When_post_playlist_must_be_success()
         {
-            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway.Create();
+            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
+                                                .Create()
+                                                .CanAddPlaylist(true);
 
             var browser = new Browser(cfg =>
             {
@@ -106,7 +108,10 @@ namespace MagicPlaylist.Test.Tests.Web
         [Test]
         public void When_post_playlist_with_known_user_must_be_success()
         {
-            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway.Create();
+            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
+                                                .Create()
+                                                .CanAddPlaylist(true);
+
             mockedMagicPlaylistGateway.AddFastUser(1, "OtherNicolas", "OtherDelfour", "othernicolas.delfour@test.com");
 
             var browser = new Browser(cfg =>
@@ -240,6 +245,55 @@ namespace MagicPlaylist.Test.Tests.Web
         }
 
         [Test]
+        public void When_post_playlist_with_cant_add_playlist_must_be_failed()
+        {
+            var radioGateway = MockedRadioGateway
+                    .Create()
+                    .TracksGenerator(0)
+                    .Build();
+
+            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
+                                                .Create()
+                                                .CanAddPlaylist(false);
+
+            var browser = new Browser(cfg =>
+            {
+                cfg.Module<HomeModule>();
+                cfg.Dependency(radioGateway);
+                cfg.Dependency(mockedMagicPlaylistGateway.Build());
+                cfg.Dependency(BuildSuccessHttpDeezer());
+            });
+
+            var response = browser.Post("/playlist", (with) => {
+                with.HttpRequest();
+                with.FormValue("id", "1");
+                with.FormValue("accessToken", "abcde");
+                with.FormValue("firstname", "Nicolas");
+                with.FormValue("lastname", "Delfour");
+                with.FormValue("email", "nicolas.delfour@test.com");
+                with.FormValue("gender", "M");
+                with.FormValue("name", "Nico");
+                with.FormValue("country", "FR");
+                with.FormValue("lang", "FR");
+                with.FormValue("birthday", "1980-02-25");
+            });
+
+            var logTable = mockedMagicPlaylistGateway._logTable;
+            var error = logTable.SingleOrDefault();
+
+            Assert.AreEqual(1, logTable.Count);
+            Assert.IsNotNull(error);
+            Assert.AreEqual("MagicPlaylistException", error.errorType);
+            Assert.AreEqual("User can't add playlist", error.message);
+            Assert.IsNotEmpty(error.stackTrace);
+            Assert.AreEqual(0, mockedMagicPlaylistGateway._userTable.Count);
+
+            Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.AreEqual("application/json; charset=utf-8", response.ContentType);
+            Assert.AreEqual("{\"success\":false}", response.Body.AsString());
+        }
+
+        [Test]
         public void When_post_playlist_with_no_tracks_must_be_failed()
         {
             var radioGateway = MockedRadioGateway
@@ -247,7 +301,9 @@ namespace MagicPlaylist.Test.Tests.Web
                     .TracksGenerator(0)
                     .Build();
 
-            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway.Create();
+            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
+                                                .Create()
+                                                .CanAddPlaylist(true);
 
             var browser = new Browser(cfg =>
             {
@@ -296,7 +352,9 @@ namespace MagicPlaylist.Test.Tests.Web
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var httpDeezer = new HttpDeezer(httpWebBuilder);
-            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway.Create();
+            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
+                                                .Create()
+                                                .CanAddPlaylist(true);
 
             var browser = new Browser(cfg =>
             {
@@ -345,7 +403,9 @@ namespace MagicPlaylist.Test.Tests.Web
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var httpDeezer = new HttpDeezer(httpWebBuilder);
-            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway.Create();
+            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
+                                                .Create()
+                                                .CanAddPlaylist(true);
 
             var browser = new Browser(cfg =>
             {
@@ -395,7 +455,10 @@ namespace MagicPlaylist.Test.Tests.Web
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var httpDeezer = new HttpDeezer(httpWebBuilder);
-            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway.Create();
+                                                
+            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
+                                                .Create()
+                                                .CanAddPlaylist(true);
 
             var browser = new Browser(cfg =>
             {
@@ -445,7 +508,9 @@ namespace MagicPlaylist.Test.Tests.Web
 
             var httpWebBuilder = new HttpWebBuilder(httpWebRequest);
             var httpDeezer = new HttpDeezer(httpWebBuilder);
-            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway.Create();
+            var mockedMagicPlaylistGateway = MockedMagicPlaylistGateway
+                                                .Create()
+                                                .CanAddPlaylist(true);
 
             var browser = new Browser(cfg =>
             {
@@ -501,6 +566,7 @@ namespace MagicPlaylist.Test.Tests.Web
         {
             return MockedMagicPlaylistGateway
                     .Create()
+                    .CanAddPlaylist(true)
                     .Build();
         }
 

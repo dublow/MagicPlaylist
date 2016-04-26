@@ -71,9 +71,9 @@
     <EmbeddedResource Include="Content\Images\toError.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <Content Include="nlog.config">
+    <EmbeddedResource Include="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

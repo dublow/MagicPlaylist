@@ -23,7 +23,7 @@ namespace MagicPlaylist.Gateway
         {
             try
             {
-                logger.Info("GetRandomTracks[userId:{0}]", userId);
+                logger.Info("[userId:{0}]GetRandomTracks", userId);
                 using (var connection = _provider.Create())
                 {
                     var tracks = connection
